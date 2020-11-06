@@ -33,6 +33,7 @@ class MathKeyword(Enum):
 	Combination = "C"
 
 class Other(Enum):
-	Value = 0
-	ETX = 1
-	Unknown = 2
+	ValueMinus = 0
+	Value = 1
+	ETX = 2
+	Unknown = 3
