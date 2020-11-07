@@ -10,9 +10,6 @@ class Operator(Enum):
 
 	Factorial = "!"
 
-	LeftBracket = "("
-	RightBracket = ")"
-
 class MathKeyword(Enum):
 	PI = "pi"
 	E = "e"
