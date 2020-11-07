@@ -108,13 +108,14 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 
 
 if __name__ == "__main__":
-	print("<-get_nestlist test->")
+	print("<-get_nestlist Test->")
 	a: List[Any] = [[1, [0]], 0]
 	b: List[Any] = [0, 1]
-	print(id(get_nestlist(b, a)))
-	print(id(a[0][1]))
+	print("Result id: ", id(get_nestlist(b, a)))
+	print("Raw id:", id(a[0][1]))
+	print()
 
-	print("<-Lexer test->")
+	print("<-Lexer Test->")
 	test_text: str = "((+2) + 20! * (-4 / 2)) - 6"
 
 	def allfor_lists(lists: List[Any]) -> None:

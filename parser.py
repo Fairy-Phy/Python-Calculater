@@ -120,8 +120,6 @@ def Calcurate(parsed_list: LexedType) -> None:
 
 		parsed_list_ptr += 1
 
-	print(parsed_list)
-	print()
 	if len(parsed_list) != 1: raise ParserException("Couldn't Calculation")
 
 # Reference list argument, output the result into list argument by using it
@@ -135,7 +133,6 @@ def Analyzer(lexed_lists: Union[List[Union[LexedType, TupleType]], TupleType]) -
 
 def Parser(lexed_lists: List[Union[LexedType, TupleType]]) -> Decimal:
 	Analyzer(lexed_lists)
-	print(lexed_lists)
 
 	if len(lexed_lists) != 1: raise ParserException("Unknown error")
 
@@ -143,14 +140,13 @@ def Parser(lexed_lists: List[Union[LexedType, TupleType]]) -> Decimal:
 
 
 if __name__ == "__main__":
-	a = range(10)
-	for b in a:
-		pass
-
 	from lexer import Lexer
+
 	test_text: str = "((2) + 20 * (-4 / 2)) - 6"
+
+	print("<-Lexer Phase->")
 	lexed_lists = Lexer(test_text)
 	print(lexed_lists)
 	print()
-	print("<-Parser test->")
-	print(Parser(lexed_lists))
+	print("<-Parser Phase->")
+	print("Result:", Parser(lexed_lists))
