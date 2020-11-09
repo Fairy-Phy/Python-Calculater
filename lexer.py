@@ -1,9 +1,9 @@
 from operator_enum import Operator, MathKeyword, Other
 from exception import LexerException
 from typing import List, Tuple, Union, Any, cast
-from decimal import Decimal
+import math
 
-TupleType = Tuple[Union[Operator, MathKeyword, Other], Union[Decimal, str]]
+TupleType = Tuple[Union[Operator, MathKeyword, Other], Union[float, str]]
 ResultType = List[TupleType]
 
 def get_nestlist(ptr_list: List[int], value_list: List[Any]) -> List[Any]:
@@ -12,6 +12,15 @@ def get_nestlist(ptr_list: List[int], value_list: List[Any]) -> List[Any]:
 		result_list = result_list[ptr]
 
 	return result_list
+
+def unknown_check(lists: List[Union[ResultType, TupleType]]) -> bool:
+	for list_value in lists:
+		if type(list_value) is list:
+			if unknown_check(cast(List[Union[ResultType, TupleType]], list_value)): return True
+		else:
+			if list_value[0] == Other.Unknown: return True
+
+	return False
 
 # Tuple is
 # Item1 -> Enum Type
@@ -26,6 +35,40 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 		text_charint: int = ord(text[text_ptr] if text_ptr < len(text) else '\0')
 
 		if text_charint == 32: pass
+		elif text_charint >= 97 and text_charint <= 122:
+			keyword: str = chr(text_charint)
+
+			while True:
+				text_ptr += 1
+				next_charint: int = ord(text[text_ptr] if text_ptr < len(text) else '\0')
+
+				if next_charint >= 97 and next_charint <= 122: keyword += chr(next_charint)
+				else:
+					text_ptr -= 1
+					break
+
+			if keyword == MathKeyword.PI.value: current_layerlist.append((Other.Value, math.pi))
+			elif keyword == MathKeyword.E.value: current_layerlist.append((Other.Value, math.e))
+			elif keyword == MathKeyword.Euler.value:
+				# ∫0→1 (1/ln(x) + 1/1 - x)dx
+				current_layerlist.append((Other.Value, float(0)))
+
+			elif keyword == MathKeyword.Sqrt.value: current_layerlist.append((MathKeyword.Sqrt, keyword))
+			elif keyword == MathKeyword.Log10.value: current_layerlist.append((MathKeyword.Log10, keyword))
+			elif keyword == MathKeyword.Log.value: current_layerlist.append((MathKeyword.Log, keyword))
+
+			elif keyword == MathKeyword.Sin.value: current_layerlist.append((MathKeyword.Sin, keyword))
+			elif keyword == MathKeyword.Asin.value: current_layerlist.append((MathKeyword.Asin, keyword))
+			elif keyword == MathKeyword.Cos.value: current_layerlist.append((MathKeyword.Cos, keyword))
+			elif keyword == MathKeyword.Acos.value: current_layerlist.append((MathKeyword.Acos, keyword))
+			elif keyword == MathKeyword.Tan.value: current_layerlist.append((MathKeyword.Tan, keyword))
+			elif keyword == MathKeyword.Atan.value: current_layerlist.append((MathKeyword.Atan, keyword))
+
+			elif keyword == MathKeyword.Permutation.value: current_layerlist.append((MathKeyword.Permutation, keyword))
+			elif keyword == MathKeyword.Combination.value: current_layerlist.append((MathKeyword.Combination, keyword))
+
+			else: current_layerlist.append((Other.Unknown, keyword))
+		elif text_charint == 44: current_layerlist.append((Other.Comma, chr(text_charint)))
 		elif text_charint == 40:
 			if len(current_layerlist) != 0 and current_layer_ptrlist[-1] == -1:
 				result_list.extend(current_layerlist)
@@ -93,7 +136,7 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 				text_charint = ord(text[text_ptr] if text_ptr < len(text) else '\0')
 
 			if text_charint != 0: text_ptr -= 1
-			current_layerlist.append((Other.Value, Decimal(value)))
+			current_layerlist.append((Other.Value, float(value)))
 		elif text_charint == 0:
 			current_layerlist.append((Other.ETX, '\0'))
 			if len(current_layer_ptrlist) != 1: raise LexerException("Not found right bracket")
@@ -104,6 +147,8 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 		text_ptr += 1
 
 	result_list.pop(-1)
+	if unknown_check(result_list): raise LexerException()
+
 	return result_list
 
 
@@ -116,7 +161,7 @@ if __name__ == "__main__":
 	print()
 
 	print("<-Lexer Test->")
-	test_text: str = "((+2) + 20! * (-4 / 2)) - 6"
+	test_text: str = "log(4/8, 6*4)"
 
 	def allfor_lists(lists: List[Any]) -> None:
 		for list_value in lists:
@@ -127,3 +172,4 @@ if __name__ == "__main__":
 			else: print(list_value)
 
 	allfor_lists(Lexer(test_text))
+	print(Lexer(test_text))

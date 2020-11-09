@@ -15,22 +15,23 @@ class MathKeyword(Enum):
 	E = "e"
 	Euler = "euler"
 
-	Sqrt = "sqrt"
-	Log10 = "log10"
-	Log = "log"
+	Sqrt = "sqrt"  # x
+	Log10 = "log10"  # x
+	Log = "log"  # x, base
 
-	Sin = "sin"
-	Asin = "asin"
-	Cos = "cos"
-	Acos = "acos"
-	Tan = "tan"
-	Atan = "atan"
+	Sin = "sin"  # x
+	Asin = "asin"  # x
+	Cos = "cos"  # x
+	Acos = "acos"  # x
+	Tan = "tan"  # x
+	Atan = "atan"  # x
 
-	Permutation = "P"
-	Combination = "C"
+	Permutation = "P"  # left, right
+	Combination = "C"  # left, right
 
 class Other(Enum):
 	ValueMinus = 0
 	Value = 1
-	ETX = 2
-	Unknown = 3
+	Comma = 2
+	ETX = 3
+	Unknown = 4

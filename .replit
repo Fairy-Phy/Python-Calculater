@@ -1,2 +1,2 @@
 language = "python3"
-run = "python ./lexer/lexer.py"
+run = "python ./lexer.py"
