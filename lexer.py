@@ -35,23 +35,20 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 		text_charint: int = ord(text[text_ptr] if text_ptr < len(text) else '\0')
 
 		if text_charint == 32: pass
-		elif text_charint >= 97 and text_charint <= 122:
+		elif (text_charint >= 97 and text_charint <= 122) or (text_charint >= 65 and text_charint <= 90):
 			keyword: str = chr(text_charint)
 
 			while True:
 				text_ptr += 1
 				next_charint: int = ord(text[text_ptr] if text_ptr < len(text) else '\0')
 
-				if next_charint >= 97 and next_charint <= 122: keyword += chr(next_charint)
+				if (next_charint >= 97 and next_charint <= 122) or (next_charint >= 65 and next_charint <= 90): keyword += chr(next_charint)
 				else:
 					text_ptr -= 1
 					break
 
 			if keyword == MathKeyword.PI.value: current_layerlist.append((Other.Value, math.pi))
 			elif keyword == MathKeyword.E.value: current_layerlist.append((Other.Value, math.e))
-			elif keyword == MathKeyword.Euler.value:
-				# ∫0→1 (1/ln(x) + 1/1 - x)dx
-				current_layerlist.append((Other.Value, float(0)))
 
 			elif keyword == MathKeyword.Sqrt.value: current_layerlist.append((MathKeyword.Sqrt, keyword))
 			elif keyword == MathKeyword.Log10.value: current_layerlist.append((MathKeyword.Log10, keyword))
@@ -147,7 +144,8 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 		text_ptr += 1
 
 	result_list.pop(-1)
-	if unknown_check(result_list): raise LexerException()
+	print(result_list)
+	if unknown_check(result_list): raise LexerException("Exist Unknown")
 
 	return result_list
 
@@ -161,7 +159,7 @@ if __name__ == "__main__":
 	print()
 
 	print("<-Lexer Test->")
-	test_text: str = "log(4/8, 6*4)"
+	test_text: str = "C(4/8, 6*4)"
 
 	def allfor_lists(lists: List[Any]) -> None:
 		for list_value in lists:

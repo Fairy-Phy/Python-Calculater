@@ -13,7 +13,6 @@ class Operator(Enum):
 class MathKeyword(Enum):
 	PI = "pi"
 	E = "e"
-	Euler = "euler"
 
 	Sqrt = "sqrt"  # x
 	Log10 = "log10"  # x
