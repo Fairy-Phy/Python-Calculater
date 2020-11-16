@@ -1,3 +1,5 @@
+# Copyright 2020 (Fairy)Phy
+
 from enum import Enum
 
 class Operator(Enum):

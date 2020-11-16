@@ -1,3 +1,5 @@
+# Copyright 2020 (Fairy)Phy
+
 from operator_enum import Operator, MathKeyword, Other
 from exception import LexerException
 from typing import List, Tuple, Union, Any, cast
@@ -42,7 +44,7 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 				text_ptr += 1
 				next_charint: int = ord(text[text_ptr] if text_ptr < len(text) else '\0')
 
-				if (next_charint >= 97 and next_charint <= 122) or (next_charint >= 65 and next_charint <= 90): keyword += chr(next_charint)
+				if (next_charint >= 97 and next_charint <= 122) or (next_charint >= 65 and next_charint <= 90) or (next_charint >= 48 and next_charint <= 57): keyword += chr(next_charint)
 				else:
 					text_ptr -= 1
 					break
@@ -144,7 +146,6 @@ def Lexer(text: str) -> List[Union[ResultType, TupleType]]:
 		text_ptr += 1
 
 	result_list.pop(-1)
-	print(result_list)
 	if unknown_check(result_list): raise LexerException("Exist Unknown")
 
 	return result_list

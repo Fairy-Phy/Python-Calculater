@@ -1,3 +1,5 @@
+# Copyright 2020 (Fairy)Phy
+
 from calcurator import Permutation, Combination
 from operator_enum import Operator, MathKeyword, Other
 from exception import ParserException

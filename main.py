@@ -1,8 +1,12 @@
+# Copyright 2020 (Fairy)Phy
+
 from calc_parser import Parser
 from lexer import Lexer
+import traceback
 
 
-version: str = "0.1"
+version: str = "0.2"
+debug: bool = False
 
 if __name__ == "__main__":
 	print("Python Calculator Varsion", version)
@@ -15,6 +19,9 @@ if __name__ == "__main__":
 		if formula_text == "":
 			print("Please enter a formula.")
 		elif formula_text == "help":
+			print("<Example>")
+			print("log(3! * ((sqrt(3^2 / 3) / sin(pi / 3)) + 4) - 9, 3)")
+			print("Result: 3.0")
 			print("If there are brackets, they are calculated from the brackets first.")
 			print()
 			print("<Operator>")
@@ -43,12 +50,23 @@ if __name__ == "__main__":
 			pass
 		elif formula_text == "exit":
 			print("Bye")
+			from time import sleep
+			sleep(3)
 			break
+		elif formula_text == "debug":
+			if debug:
+				debug = False
+				print("debug switched to False")
+			else:
+				debug = True
+				print("debug switched to True")
 		else:
 			try:
 				lexed_lists = Lexer(formula_text)
+				if debug: print("lexed_lists:", lexed_lists)
 				result = Parser(lexed_lists)
 				print("Result:", result)
 			except Exception as error:
 				print("An error occurred during the calculation.")
-				print(error)
+				if debug: traceback.print_exc()
+				else: print(error)

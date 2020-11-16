@@ -1,3 +1,5 @@
+# Copyright 2020 (Fairy)Phy
+
 import math
 
 def Permutation(left: float, right: float) -> float:
